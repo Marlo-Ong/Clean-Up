@@ -6,12 +6,14 @@ public class TintErasable : MonoBehaviour
     [Range(0f, 1f)]
     public float eraseStrength = 0.15f;     // Alpha removed per pass
     public float percentClean;
+    private const float CleanAlphaThreshold = 0.01f;
 
     SpriteRenderer sr;
     Texture2D runtimeTexture;
     Color[] pixels;
     int texWidth;
     int texHeight;
+    int cleanTexelCount;
 
     void Awake()
     {
@@ -38,6 +40,14 @@ public class TintErasable : MonoBehaviour
         pixels = runtimeTexture.GetPixels();
         texWidth = runtimeTexture.width;
         texHeight = runtimeTexture.height;
+        cleanTexelCount = 0;
+
+        foreach (Color pixel in pixels)
+        {
+            if (pixel.a < CleanAlphaThreshold)
+                cleanTexelCount++;
+        }
+        percentClean = cleanTexelCount / (float)pixels.Length;
 
         // Create a new sprite using the runtime texture
         sr.sprite = Sprite.Create(
@@ -55,6 +65,8 @@ public class TintErasable : MonoBehaviour
 
         float pixelsPerUnit = sr.sprite.pixelsPerUnit;
         int radiusPx = Mathf.RoundToInt(radius * pixelsPerUnit);
+        int radiusSq = radiusPx * radiusPx;
+        bool anyPixelChanged = false;
 
         // Get texels.
         for (int y = -radiusPx; y <= radiusPx; y++)
@@ -67,36 +79,32 @@ public class TintErasable : MonoBehaviour
                 int px = cx + x;
                 if (px < 0 || px >= texWidth) continue;
 
-                float dist = Mathf.Sqrt(x * x + y * y);
-                if (dist > radiusPx) continue;
+                int distSq = x * x + y * y;
+                if (distSq > radiusSq) continue;
 
                 int index = py * texWidth + px;
                 Color c = pixels[index];
+                float previousAlpha = c.a;
+                float newAlpha = Mathf.Clamp01(previousAlpha - eraseStrength);
+                if (Mathf.Approximately(previousAlpha, newAlpha))
+                    continue;
 
                 // Increase transparency.
-                c.a = Mathf.Clamp01(c.a - eraseStrength);
+                c.a = newAlpha;
                 pixels[index] = c;
+                anyPixelChanged = true;
+
+                if (previousAlpha >= CleanAlphaThreshold && newAlpha < CleanAlphaThreshold)
+                    cleanTexelCount++;
             }
         }
 
+        if (!anyPixelChanged)
+            return;
+
         runtimeTexture.SetPixels(pixels);
         runtimeTexture.Apply(false);
-
-        UpdatePercentageCleaned();
-    }
-
-    private void UpdatePercentageCleaned()
-    {
-        int cleanTexels = 0;
-
-        var pixels = runtimeTexture.GetPixelData<Color32>(0);
-        foreach (var pixel in pixels)
-        {
-            if (pixel.a < 0.01f)
-                cleanTexels++;
-        }
-
-        this.percentClean = cleanTexels / (float)pixels.Length;
+        percentClean = cleanTexelCount / (float)pixels.Length;
     }
 
     bool WorldToPixel(Vector2 worldPos, out int px, out int py)

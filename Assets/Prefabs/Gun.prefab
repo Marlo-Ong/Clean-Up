@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 742257571480391723}
   - component: {fileID: 5942913715814552908}
   m_Layer: 0
-  m_Name: Gun Overlay
+  m_Name: Overlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -107,6 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TintErasable
   eraseStrength: 0.15
+  percentClean: 0
 --- !u!50 &742257571480391723
 Rigidbody2D:
   serializedVersion: 5
@@ -224,7 +225,7 @@ GameObject:
   - component: {fileID: 3736851590001099706}
   - component: {fileID: 9161563758139041174}
   m_Layer: 0
-  m_Name: Gun Sprite
+  m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
