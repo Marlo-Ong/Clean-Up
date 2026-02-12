@@ -3,11 +3,9 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public class TintErasable : MonoBehaviour
 {
-    [Header("Erase Settings")]
-    public float eraseRadiusWorld = 0.2f;   // Radius in world units
     [Range(0f, 1f)]
     public float eraseStrength = 0.15f;     // Alpha removed per pass
-    public bool softEdges = true;
+    public float percentClean;
 
     SpriteRenderer sr;
     Texture2D runtimeTexture;
@@ -50,19 +48,15 @@ public class TintErasable : MonoBehaviour
         );
     }
 
-    void Update()
-    {
-        this.EraseAtWorldPosition(this.transform.position);
-    }
-
-    public void EraseAtWorldPosition(Vector2 worldPos)
+    public void EraseAtWorldPosition(Vector2 worldPos, float radius)
     {
         if (!WorldToPixel(worldPos, out int cx, out int cy))
             return;
 
         float pixelsPerUnit = sr.sprite.pixelsPerUnit;
-        int radiusPx = Mathf.RoundToInt(eraseRadiusWorld * pixelsPerUnit);
+        int radiusPx = Mathf.RoundToInt(radius * pixelsPerUnit);
 
+        // Get texels.
         for (int y = -radiusPx; y <= radiusPx; y++)
         {
             int py = cy + y;
@@ -76,20 +70,33 @@ public class TintErasable : MonoBehaviour
                 float dist = Mathf.Sqrt(x * x + y * y);
                 if (dist > radiusPx) continue;
 
-                float falloff = softEdges
-                    ? 1f - (dist / radiusPx)
-                    : 1f;
-
                 int index = py * texWidth + px;
                 Color c = pixels[index];
 
-                c.a = Mathf.Clamp01(c.a - eraseStrength * falloff);
+                // Increase transparency.
+                c.a = Mathf.Clamp01(c.a - eraseStrength);
                 pixels[index] = c;
             }
         }
 
         runtimeTexture.SetPixels(pixels);
         runtimeTexture.Apply(false);
+
+        UpdatePercentageCleaned();
+    }
+
+    private void UpdatePercentageCleaned()
+    {
+        int cleanTexels = 0;
+
+        var pixels = runtimeTexture.GetPixelData<Color32>(0);
+        foreach (var pixel in pixels)
+        {
+            if (pixel.a < 0.01f)
+                cleanTexels++;
+        }
+
+        this.percentClean = cleanTexels / (float)pixels.Length;
     }
 
     bool WorldToPixel(Vector2 worldPos, out int px, out int py)
