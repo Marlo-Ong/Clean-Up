@@ -14,6 +14,7 @@ public class TintErasable : MonoBehaviour
     int texWidth;
     int texHeight;
     int cleanTexelCount;
+    int texelCount;
 
     void Awake()
     {
@@ -41,13 +42,15 @@ public class TintErasable : MonoBehaviour
         texWidth = runtimeTexture.width;
         texHeight = runtimeTexture.height;
         cleanTexelCount = 0;
+        texelCount = 0;
 
+        // Count non-transparent pixels only.
         foreach (Color pixel in pixels)
         {
-            if (pixel.a < CleanAlphaThreshold)
-                cleanTexelCount++;
+            if (pixel.a >= CleanAlphaThreshold)
+                texelCount++;
         }
-        percentClean = cleanTexelCount / (float)pixels.Length;
+        percentClean = 0.0f;
 
         // Create a new sprite using the runtime texture
         sr.sprite = Sprite.Create(
@@ -104,7 +107,7 @@ public class TintErasable : MonoBehaviour
 
         runtimeTexture.SetPixels(pixels);
         runtimeTexture.Apply(false);
-        percentClean = cleanTexelCount / (float)pixels.Length;
+        percentClean = cleanTexelCount / (float)texelCount;
     }
 
     bool WorldToPixel(Vector2 worldPos, out int px, out int py)
