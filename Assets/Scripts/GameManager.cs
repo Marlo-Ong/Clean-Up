@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -8,6 +9,8 @@ public class GameManager : MonoBehaviour
     public GameObject[] objectsToSpawn;
     public Eraser eraser;
     public Slider cleanProgressSlider;
+    public IdleTextAnimation roundTextAnimation;
+    public Light2D light;
 
     [Header("Values")]
     public float percentCleanThreshold;
@@ -16,6 +19,7 @@ public class GameManager : MonoBehaviour
     private TintErasable activeObject;
     private int currentObjectIndex;
     public static bool IsCleaning { get; private set; }
+    public float RoundProgress => this.currentObjectIndex / (float)this.objectsToSpawn.Length;
 
     void Start()
     {
@@ -45,13 +49,14 @@ public class GameManager : MonoBehaviour
 
     IEnumerator ShowNextObject()
     {
+        // End round.
         IsCleaning = false;
 
+        // Slide downwards out of view.
         float elapsed = 0f;
         Vector3 startPoint = this.transform.position;
         Vector2 endPoint = new(this.transform.position.x, -10);
 
-        // Slide downwards out of view.
         while (elapsed < this.roundTransitionDuration)
         {
             elapsed += Time.deltaTime;
@@ -70,6 +75,7 @@ public class GameManager : MonoBehaviour
 
         // Change object.
         Destroy(this.activeObject);
+        this.currentObjectIndex++;
         this.activeObject = SpawnObject(this.currentObjectIndex);
 
         // Slide upwards into view.
@@ -86,7 +92,14 @@ public class GameManager : MonoBehaviour
         }
         this.transform.position = endPoint;
 
+        // Start round.
         IsCleaning = true;
+
+        // Increase vignette strength.
+        this.light.falloffIntensity = RoundProgress;
+
+        // Start animation.
+        this.roundTextAnimation.StartAnimation();
     }
 
     void EndGame()
