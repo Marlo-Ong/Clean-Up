@@ -930,10 +930,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   objectsToSpawn:
   - {fileID: 3093992593720545618, guid: ff3a15c5684524613b8b88c8ffac0879, type: 3}
+  - {fileID: 3093992593720545618, guid: ff3a15c5684524613b8b88c8ffac0879, type: 3}
+  - {fileID: 3093992593720545618, guid: ff3a15c5684524613b8b88c8ffac0879, type: 3}
   eraser: {fileID: 1450560632}
   cleanProgressSlider: {fileID: 481469876}
   percentCleanThreshold: 0.85
-  roundTransitionDuration: 5
+  roundTransitionDuration: 1
 --- !u!1 &1111241523
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 
     private TintErasable activeObject;
     private int currentObjectIndex;
-    private bool isCleaning = false;
+    public static bool IsCleaning { get; private set; }
 
     void Start()
     {
@@ -24,12 +24,12 @@ public class GameManager : MonoBehaviour
 
         this.cleanProgressSlider.maxValue = this.percentCleanThreshold - 0.01f;
 
-        this.isCleaning = true;
+        IsCleaning = true;
     }
 
     void Update()
     {
-        if (!this.isCleaning)
+        if (!IsCleaning)
             return;
 
         this.cleanProgressSlider.value = this.activeObject.percentClean;
@@ -45,19 +45,21 @@ public class GameManager : MonoBehaviour
 
     IEnumerator ShowNextObject()
     {
-        this.isCleaning = false;
+        IsCleaning = false;
 
         float elapsed = 0f;
-        Vector2 endPoint = new(this.transform.position.x, -100);
+        Vector3 startPoint = this.transform.position;
+        Vector2 endPoint = new(this.transform.position.x, -10);
 
         // Slide downwards out of view.
         while (elapsed < this.roundTransitionDuration)
         {
             elapsed += Time.deltaTime;
             float t = elapsed / this.roundTransitionDuration;
-            Vector2.Lerp(this.transform.position, endPoint, t);
+            this.transform.position = Vector2.Lerp(startPoint, endPoint, t);
             yield return null;
         }
+        this.transform.position = endPoint;
 
         // End game if last object.
         if (this.currentObjectIndex == this.objectsToSpawn.Length - 1)
@@ -72,17 +74,19 @@ public class GameManager : MonoBehaviour
 
         // Slide upwards into view.
         elapsed = 0f;
+        startPoint = this.transform.position;
         endPoint = new(this.transform.position.x, 0);
 
         while (elapsed < this.roundTransitionDuration)
         {
             elapsed += Time.deltaTime;
             float t = elapsed / this.roundTransitionDuration;
-            Vector2.Lerp(this.transform.position, endPoint, t);
+            this.transform.position = Vector2.Lerp(startPoint, endPoint, t);
             yield return null;
         }
+        this.transform.position = endPoint;
 
-        this.isCleaning = true;
+        IsCleaning = true;
     }
 
     void EndGame()

@@ -19,7 +19,7 @@ public class MouseInput : MonoBehaviour
 
     void Update()
     {
-        if (!isActionValid)
+        if (!isActionValid || !GameManager.IsCleaning)
             return;
 
         Vector2 screenPos = pointInputAction.action.ReadValue<Vector2>();
