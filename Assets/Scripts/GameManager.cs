@@ -38,8 +38,8 @@ public class GameManager : MonoBehaviour
         if (!IsCleaning)
             return;
 
-        this.cleanProgressSlider.value = this.activeObject.percentClean;
-        if (this.activeObject.percentClean >= percentCleanThreshold)
+        this.cleanProgressSlider.value = this.activeObject.PercentClean;
+        if (this.activeObject.PercentClean >= percentCleanThreshold)
             StartCoroutine(this.ShowNextObject());
     }
 

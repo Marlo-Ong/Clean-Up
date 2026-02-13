@@ -5,8 +5,9 @@ public class TintErasable : MonoBehaviour
 {
     [Range(0f, 1f)]
     public float eraseStrength = 0.15f;     // Alpha removed per pass
-    public float percentClean;
     private const float CleanAlphaThreshold = 0.01f;
+    private float percentClean;
+    public float PercentClean => this.percentClean;
 
     SpriteRenderer sr;
     Texture2D runtimeTexture;

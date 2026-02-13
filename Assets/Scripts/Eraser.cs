@@ -7,6 +7,9 @@ public class Eraser : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D other)
     {
+        if (!GameManager.IsCleaning)
+            return;
+
         Vector3 diff = this.transform.position - this.lastPosition;
         this.lastPosition = this.transform.position;
         if (diff.sqrMagnitude < 0.01f)
