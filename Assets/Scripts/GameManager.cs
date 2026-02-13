@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public Eraser eraser;
     public Slider cleanProgressSlider;
     public IdleTextAnimation roundTextAnimation;
-    public Light2D light;
+    public new Light2D light;
 
     [Header("Values")]
     public float percentCleanThreshold;
@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour
         }
 
         // Change object.
-        Destroy(this.activeObject);
+        Destroy(this.activeObject.transform.parent.gameObject);
         this.currentObjectIndex++;
         this.activeObject = SpawnObject(this.currentObjectIndex);
 
