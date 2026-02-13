@@ -42,7 +42,7 @@ public class ScrubAudio : MonoBehaviour
             startingPitch + magnitude,
             startingPitch - pitchVariance,
             startingPitch + pitchVariance);
-        source.PlayOneShot(clips[index]);
+        source.PlayOneShot(clips[index], volumeScale: source.volume);
     }
 
     private bool ChangedDirection(Vector3 curr, Vector3 prev)

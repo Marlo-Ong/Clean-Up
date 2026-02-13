@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
@@ -11,12 +12,17 @@ public class GameManager : MonoBehaviour
     public Slider cleanProgressSlider;
     public IdleTextAnimation roundTextAnimation;
     public new Light2D light;
-    public AudioSource audioSource;
+    public AudioSource musicSource;
+    public AudioSource sfxSource;
     public AudioClip roundEndSound;
+    public AudioClip gameEndSound;
+    public Animator endingAnimation;
+    public TMP_Text instructionText;
 
     [Header("Values")]
     public float percentCleanThreshold;
     public float roundTransitionDuration;
+    public float endTransitionDuration;
 
     private TintErasable activeObject;
     private int currentObjectIndex;
@@ -55,7 +61,7 @@ public class GameManager : MonoBehaviour
         IsCleaning = false;
 
         // Play effects.
-        this.audioSource.PlayOneShot(this.roundEndSound);
+        this.sfxSource.PlayOneShot(this.roundEndSound);
 
         // Slide downwards out of view.
         {
@@ -80,13 +86,14 @@ public class GameManager : MonoBehaviour
             this.light.falloffIntensity = RoundProgress;
 
             // Decrease volume.
-            this.audioSource.volume = 1 - RoundProgress;
+            bool isLastRound = this.currentObjectIndex == this.objectsToSpawn.Length - 1;
+            this.musicSource.volume = isLastRound ? 0.01f : 1 - RoundProgress;
         }
 
         // End game if last object.
         if (this.currentObjectIndex == this.objectsToSpawn.Length)
         {
-            this.EndGame();
+            StartCoroutine(this.EndGame());
             yield break;
         }
 
@@ -120,8 +127,49 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void EndGame()
+    IEnumerator EndGame()
     {
-        Debug.Log("Game ended");
+        // Play effects.
+        this.musicSource.Stop();
+        this.musicSource.clip = this.gameEndSound;
+        this.musicSource.volume = 1.0f;
+        this.musicSource.Play();
+
+        this.endingAnimation.SetTrigger("End");
+
+        this.instructionText.text = "Escape!";
+        this.roundTextAnimation.StartAnimation();
+
+        // Animate ending.
+        this.cleanProgressSlider.value = 0;
+
+        float elapsed = 0f;
+        while (elapsed < this.endTransitionDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / this.endTransitionDuration;
+
+            this.musicSource.volume = 1 - t;
+            this.cleanProgressSlider.value = t;
+
+            yield return null;
+        }
+
+        // Successful escape.
+        this.musicSource.volume = 0;
+        this.instructionText.text = string.Empty;
+        this.cleanProgressSlider.gameObject.SetActive(false);
+        this.sfxSource.PlayOneShot(this.roundEndSound);
+
+        // Fade out.
+        elapsed = 0f;
+        while (elapsed < 5f)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / 5f;
+            this.light.intensity = 1 - t;
+            yield return null;
+        }
+        this.light.intensity = 0;
     }
 }
