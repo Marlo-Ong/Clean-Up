@@ -980,7 +980,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   objectsToSpawn:
   - {fileID: 3093992593720545618, guid: 9b40fabaaabeb4afb84f57a35fb62e06, type: 3}
-  - {fileID: 3093992593720545618, guid: 9b40fabaaabeb4afb84f57a35fb62e06, type: 3}
+  - {fileID: 3093992593720545618, guid: 6fab5ba5696a94341ba536b9fa0222e4, type: 3}
   - {fileID: 3093992593720545618, guid: ff3a15c5684524613b8b88c8ffac0879, type: 3}
   eraser: {fileID: 1450560632}
   cleanProgressSlider: {fileID: 481469876}
