@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8392920519538954326}
   - component: {fileID: 6184288013404084683}
   - component: {fileID: 742257571480391723}
-  - component: {fileID: 1267618493071572725}
+  - component: {fileID: 7069377341192327090}
   m_Layer: 0
   m_Name: Overlay
   m_TagString: Untagged
@@ -135,8 +135,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!60 &1267618493071572725
-PolygonCollider2D:
+--- !u!61 &7069377341192327090
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -165,7 +165,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -179,54 +179,8 @@ PolygonCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0.69, y: -0.88}
-      - {x: 0.88, y: -0.78}
-      - {x: 1.0799999, y: -0.62}
-      - {x: 1.27, y: -0.42999998}
-      - {x: 1.38, y: -0.25}
-      - {x: 1.54, y: 0.08}
-      - {x: 1.61, y: 0.35999998}
-      - {x: 1.63, y: 0.47}
-      - {x: 1.63, y: 0.59}
-      - {x: 1.5799999, y: 0.7}
-      - {x: 1.48, y: 0.78999996}
-      - {x: 1.4, y: 0.84999996}
-      - {x: 1.22, y: 0.93}
-      - {x: 1.11, y: 0.97999996}
-      - {x: 0.89, y: 1.03}
-      - {x: 0.69, y: 1.0699999}
-      - {x: 0.55, y: 1.1}
-      - {x: 0.22, y: 1.12}
-      - {x: -0.19, y: 1.12}
-      - {x: -0.44, y: 1.1}
-      - {x: -0.85999995, y: 1.04}
-      - {x: -1.02, y: 1}
-      - {x: -1.29, y: 0.9}
-      - {x: -1.4, y: 0.84}
-      - {x: -1.5899999, y: 0.66999996}
-      - {x: -1.63, y: 0.59}
-      - {x: -1.63, y: 0.44}
-      - {x: -1.5699999, y: 0.17999999}
-      - {x: -1.55, y: 0.12}
-      - {x: -1.49, y: -0.04}
-      - {x: -1.36, y: -0.29999998}
-      - {x: -1.27, y: -0.42}
-      - {x: -1.1899999, y: -0.52}
-      - {x: -1.04, y: -0.65999997}
-      - {x: -0.87, y: -0.78}
-      - {x: -0.71, y: -0.87}
-      - {x: -0.62, y: -0.95}
-      - {x: -0.52, y: -1.01}
-      - {x: -0.39999998, y: -1.05}
-      - {x: -0.22, y: -1.09}
-      - {x: -0.16, y: -1.1}
-      - {x: 0.24, y: -1.1}
-      - {x: 0.38, y: -1.06}
-      - {x: 0.53, y: -1.01}
-      - {x: 0.62, y: -0.95}
-  m_UseDelaunayMesh: 1
+  m_Size: {x: 3.3, y: 2.26}
+  m_EdgeRadius: 0
 --- !u!1 &3093992593720545618
 GameObject:
   m_ObjectHideFlags: 0
@@ -318,7 +272,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 23b7dca8caf844513ad950c7e6077d23, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

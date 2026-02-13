@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec382f4fe0bd47d4abce156e9efd031d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TintErasable
-  eraseStrength: 0.01
+  eraseStrength: 0.1
   percentClean: 0
 --- !u!50 &742257571480391723
 Rigidbody2D:
@@ -604,7 +604,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 23b7dca8caf844513ad950c7e6077d23, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
